@@ -1500,6 +1500,7 @@ public static partial class InitListViewAndEditBox
 
             textBox.TextChanged += vm.SubtitleTextChanged;
             textBox.GotFocus += (_, _) => vm.SubtitleTextBoxGotFocus();
+            AttachZoomHandlers(textBox);
 
             vm.EditTextBox = new TextBoxWrapper(textBox);
             return textBox;
@@ -1599,6 +1600,8 @@ public static partial class InitListViewAndEditBox
                 textBox.FontFamily = new FontFamily(Se.Settings.Appearance.SubtitleTextBoxAndGridFontName);
             }
 
+            AttachZoomHandlers(textBox);
+
             vm.EditTextBoxOriginal = new TextBoxWrapper(textBox);
             return textBox;
         }
@@ -1636,6 +1639,42 @@ public static partial class InitListViewAndEditBox
         vm.EditTextBoxOriginalHelper = helper;
 
         return textEditorBorder;
+    }
+
+    private static void AttachZoomHandlers(TextBox textBox)
+    {
+        textBox.PointerWheelChanged += (_, e) =>
+        {
+            if (e.KeyModifiers.HasFlag(KeyModifiers.Control))
+            {
+                var delta = e.Delta.Y > 0 ? 1.0 : -1.0;
+                var newSize = Math.Clamp(textBox.FontSize + delta, 8.0, 40.0);
+                textBox.FontSize = newSize;
+                Se.Settings.Appearance.SubtitleTextBoxFontSize = newSize;
+                e.Handled = true;
+            }
+        };
+
+        textBox.KeyDown += (_, e) =>
+        {
+            if (e.KeyModifiers.HasFlag(KeyModifiers.Control))
+            {
+                if (e.Key == Key.OemPlus || e.Key == Key.Add)
+                {
+                    var newSize = Math.Clamp(textBox.FontSize + 1.0, 8.0, 40.0);
+                    textBox.FontSize = newSize;
+                    Se.Settings.Appearance.SubtitleTextBoxFontSize = newSize;
+                    e.Handled = true;
+                }
+                else if (e.Key == Key.OemMinus || e.Key == Key.Subtract)
+                {
+                    var newSize = Math.Clamp(textBox.FontSize - 1.0, 8.0, 40.0);
+                    textBox.FontSize = newSize;
+                    Se.Settings.Appearance.SubtitleTextBoxFontSize = newSize;
+                    e.Handled = true;
+                }
+            }
+        };
     }
 
     /// <summary>

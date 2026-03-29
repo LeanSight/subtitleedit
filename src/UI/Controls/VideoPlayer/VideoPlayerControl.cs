@@ -243,6 +243,7 @@ namespace Nikse.SubtitleEdit.Controls.VideoPlayer
 
             // Attach a tunnel handler so we see clicks even if child handles them.
             mainGrid.AddHandler(InputElement.PointerPressedEvent, OnMainGridPointerPressed, RoutingStrategies.Tunnel, handledEventsToo: true);
+            mainGrid.AddHandler(InputElement.PointerWheelChangedEvent, OnMainGridPointerWheelChanged, RoutingStrategies.Tunnel, handledEventsToo: true);
 
             // Buttons
             var stackPanel = new StackPanel
@@ -448,9 +449,22 @@ namespace Nikse.SubtitleEdit.Controls.VideoPlayer
         // Raised when the user clicks the video surface (row 0), not the controls row.
         public event EventHandler<PointerPressedEventArgs>? SurfacePointerPressed;
 
+        // Raised when the user scrolls the mouse wheel with Ctrl held over the video surface.
+        public event Action<double>? SubtitleFontSizeChangeRequested;
+
         // Enable/disable click-to-toggle behavior (default on)
         public bool ClickToTogglePlay { get; set; } = true;
         public bool IsSmpteTimingEnabled { get; set; }
+
+        private void OnMainGridPointerWheelChanged(object? sender, PointerWheelEventArgs e)
+        {
+            if (e.KeyModifiers.HasFlag(KeyModifiers.Control))
+            {
+                var delta = e.Delta.Y > 0 ? 1.0 : -1.0;
+                SubtitleFontSizeChangeRequested?.Invoke(delta);
+                e.Handled = true;
+            }
+        }
 
         private void OnMainGridPointerPressed(object? sender, PointerPressedEventArgs e)
         {

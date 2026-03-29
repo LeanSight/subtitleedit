@@ -1,8 +1,11 @@
+using System;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using AvaloniaEdit;
 using Nikse.SubtitleEdit.Features.Shared.TextBoxUtils;
+using Nikse.SubtitleEdit.Logic.Config;
 
 namespace Nikse.SubtitleEdit.Features.Main.Layout;
 
@@ -42,6 +45,8 @@ public class TextEditorBindingHelper
         _textEditor.Loaded += OnTextEditorLoaded;
         _textEditor.TextChanged += OnTextEditorTextChanged;
         _textEditor.Tapped += OnTextEditorTapped;
+        _textEditor.PointerWheelChanged += OnPointerWheelChanged;
+        _textEditor.KeyDown += OnZoomKeyDown;
 
         UpdateEditorFromViewModel();
     }
@@ -51,6 +56,8 @@ public class TextEditorBindingHelper
         _textEditor.Loaded -= OnTextEditorLoaded;
         _textEditor.TextChanged -= OnTextEditorTextChanged;
         _textEditor.Tapped -= OnTextEditorTapped;
+        _textEditor.PointerWheelChanged -= OnPointerWheelChanged;
+        _textEditor.KeyDown -= OnZoomKeyDown;
 
         var textArea = _textEditor.TextArea;
         if (textArea != null)
@@ -132,6 +139,40 @@ public class TextEditorBindingHelper
         {
             _isUpdatingFromViewModel = false;
         }
+    }
+
+    private void OnPointerWheelChanged(object? sender, PointerWheelEventArgs e)
+    {
+        if (e.KeyModifiers.HasFlag(KeyModifiers.Control))
+        {
+            var delta = e.Delta.Y > 0 ? 1.0 : -1.0;
+            ApplyZoom(delta);
+            e.Handled = true;
+        }
+    }
+
+    private void OnZoomKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.KeyModifiers.HasFlag(KeyModifiers.Control))
+        {
+            if (e.Key == Key.OemPlus || e.Key == Key.Add)
+            {
+                ApplyZoom(1.0);
+                e.Handled = true;
+            }
+            else if (e.Key == Key.OemMinus || e.Key == Key.Subtract)
+            {
+                ApplyZoom(-1.0);
+                e.Handled = true;
+            }
+        }
+    }
+
+    private void ApplyZoom(double delta)
+    {
+        var newSize = Math.Clamp(_textEditor.FontSize + delta, 8.0, 40.0);
+        _textEditor.FontSize = newSize;
+        Se.Settings.Appearance.SubtitleTextBoxFontSize = newSize;
     }
 
     private void UpdateViewModelFromEditor()

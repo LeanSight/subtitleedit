@@ -74,6 +74,12 @@ public static class InitVideoPlayer
         };
         control.VideoFileNamePointerPressed += vm.VideoPlayerControlPointerPressed;
         control.SurfacePointerPressed += (_, _) => vm.VideoPlayerAreaPointerPressed();
+        control.SubtitleFontSizeChangeRequested += delta =>
+        {
+            var newSize = Math.Clamp(Se.Settings.Video.MpvPreviewFontSize + (int)delta, 8, 80);
+            Se.Settings.Video.MpvPreviewFontSize = newSize;
+            vm.RefreshMpvPreviewStyle();
+        };
 
         Grid.SetRow(control, 0);
         mainGrid.Children.Add(control);

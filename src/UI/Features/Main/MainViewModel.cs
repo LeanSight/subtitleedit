@@ -15278,6 +15278,16 @@ public partial class MainViewModel :
         }
     }
 
+    internal void RefreshMpvPreviewStyle()
+    {
+        var vp = GetVideoPlayerControl();
+        if (vp != null && vp.VideoPlayerInstance is LibMpvDynamicPlayer mpv)
+        {
+            _mpvReloader.UpdateMpvStyle();
+            _ = _mpvReloader.RefreshMpv(mpv, GetUpdateSubtitle(), _subtitleSecondary, SelectedSubtitleFormat);
+        }
+    }
+
     internal void ComboBoxSubtitleFormatPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         if (e.GetCurrentPoint(null).Properties.IsRightButtonPressed)
