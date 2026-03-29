@@ -74,7 +74,7 @@ public static partial class InitListViewAndEditBox
 
         var mainGrid = new Grid
         {
-            RowDefinitions = new RowDefinitions("*,Auto"),
+            RowDefinitions = new RowDefinitions("*,Auto,Auto"),
         };
 
         vm.SubtitleGrid = new DataGrid
@@ -951,7 +951,7 @@ public static partial class InitListViewAndEditBox
         {
             Margin = new Thickness(10),
             ColumnDefinitions = new ColumnDefinitions("Auto, *"), // Two columns: left for time controls, right for text
-            RowDefinitions = new RowDefinitions("Auto")
+            RowDefinitions = new RowDefinitions("*")
         };
 
         // Left panel for time controls
@@ -1434,7 +1434,16 @@ public static partial class InitListViewAndEditBox
         Grid.SetColumn(textEditGrid, 1);
         editGrid.Children.Add(textEditGrid);
 
-        Grid.SetRow(editGrid, 1);
+        var editSplitter = new GridSplitter
+        {
+            Height = UiUtil.SplitterWidthOrHeight,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+        Grid.SetRow(editSplitter, 1);
+        mainGrid.Children.Add(editSplitter);
+
+        Grid.SetRow(editGrid, 2);
         mainGrid.Children.Add(editGrid);
 
 
@@ -1470,7 +1479,7 @@ public static partial class InitListViewAndEditBox
                 AcceptsReturn = true,
                 TextWrapping = TextWrapping.Wrap,
                 MinHeight = 92,
-                Height = 92,
+                VerticalAlignment = VerticalAlignment.Stretch,
                 [!TextBox.TextProperty] = new Binding(nameof(vm.SelectedSubtitle) + "." + nameof(SubtitleLineViewModel.Text))
                 {
                     Mode = BindingMode.TwoWay
@@ -1536,12 +1545,12 @@ public static partial class InitListViewAndEditBox
         var textEditor = new TextEditor
         {
             MinHeight = 92,
-            Height = 92,
+            VerticalAlignment = VerticalAlignment.Stretch,
             FontSize = Se.Settings.Appearance.SubtitleTextBoxFontSize,
             FontWeight = Se.Settings.Appearance.SubtitleTextBoxFontBold ? FontWeight.Bold : FontWeight.Normal,
             WordWrap = true,
             ShowLineNumbers = false,
-            HorizontalScrollBarVisibility = Avalonia.Controls.Primitives.ScrollBarVisibility.Auto,
+            HorizontalScrollBarVisibility = Avalonia.Controls.Primitives.ScrollBarVisibility.Disabled,
             VerticalScrollBarVisibility = Avalonia.Controls.Primitives.ScrollBarVisibility.Auto,
             Focusable = true,
             Padding = new Thickness(6, 4, 4, 4),
@@ -1571,7 +1580,7 @@ public static partial class InitListViewAndEditBox
                 AcceptsReturn = true,
                 TextWrapping = TextWrapping.Wrap,
                 MinHeight = 92,
-                Height = 92,
+                VerticalAlignment = VerticalAlignment.Stretch,
                 [!TextBox.TextProperty] = new Binding(nameof(vm.SelectedSubtitle) + "." + nameof(SubtitleLineViewModel.OriginalText))
                 {
                     Mode = BindingMode.TwoWay
