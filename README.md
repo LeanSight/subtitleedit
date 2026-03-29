@@ -4,7 +4,20 @@ The subtitle editor :)
 
 ---
 
-## 🌐 Documentation & FAQ
+## Fork: Transcription Assistance
+
+This is a fork of [SubtitleEdit](https://github.com/SubtitleEdit/subtitleedit) with UX improvements for transcription workflows:
+
+- **Audio-only playback** - play audio without video for transcription assistance
+- **Resizable edit area** - GridSplitter between subtitle grid and edit box, drag to resize
+- **Word wrap fix** - text editor now wraps correctly (fixed HorizontalScrollBarVisibility conflict)
+- **Ctrl+Wheel zoom** - zoom in/out in both the text editor and video subtitle preview
+- **Ctrl+Plus/Minus zoom** - keyboard zoom for the text editor
+- **Modern font defaults** - Segoe UI Variable Text on Windows 11, bold disabled by default
+
+---
+
+## Documentation & FAQ
 http://subtitleedit.github.io/subtitleedit/
 
 ---
