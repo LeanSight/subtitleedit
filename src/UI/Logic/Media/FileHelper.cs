@@ -495,6 +495,42 @@ namespace Nikse.SubtitleEdit.Logic.Media
             return new List<string> { "*.mkv", "*.mp4", "*.ts", "*.mov", "*.mpeg", "*.m2ts" };
         }
 
+        public async Task<string[]> PickOpenAudioFiles(Visual sender, string title)
+        {
+            var topLevel = TopLevel.GetTopLevel(sender)!;
+
+            var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+            {
+                Title = title,
+                AllowMultiple = true,
+                FileTypeFilter = MakeOpenAudioFilter(),
+            });
+
+            return files.Select(p => p.Path.LocalPath).ToArray();
+        }
+
+        private static IReadOnlyList<FilePickerFileType> MakeOpenAudioFilter()
+        {
+            var fileTypes = new List<FilePickerFileType>
+            {
+                new FilePickerFileType("Audio files")
+                {
+                    Patterns = GetAudioExtensions()
+                },
+                new FilePickerFileType("All files")
+                {
+                    Patterns = new List<string> { "*" },
+                }
+            };
+
+            return fileTypes;
+        }
+
+        private static List<string> GetAudioExtensions()
+        {
+            return new List<string> { "*.mp3", "*.wav", "*.flac", "*.ogg", "*.m4a", "*.aac", "*.wma", "*.opus" };
+        }
+
         public async Task<string> PickOpenImageFile(Visual sender, string title)
         {
             var topLevel = TopLevel.GetTopLevel(sender)!;

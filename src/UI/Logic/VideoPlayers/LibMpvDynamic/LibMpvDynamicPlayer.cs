@@ -585,6 +585,22 @@ public sealed class LibMpvDynamicPlayer : IDisposable, IVideoPlayerInstance
 
     public string FileName => _fileName;
 
+    private static readonly string[] AudioExtensions = { ".mp3", ".wav", ".flac", ".ogg", ".m4a", ".aac", ".wma", ".opus" };
+
+    public bool IsAudioOnly
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(_fileName))
+            {
+                return false;
+            }
+
+            var ext = Path.GetExtension(_fileName).ToLowerInvariant();
+            return Array.Exists(AudioExtensions, e => e == ext);
+        }
+    }
+
     public async Task LoadFile(string path)
     {
         EnsureNotDisposed();
