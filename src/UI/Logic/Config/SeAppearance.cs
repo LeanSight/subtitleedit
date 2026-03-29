@@ -73,7 +73,7 @@ public class SeAppearance
         SubtitleGridFontSize = 13d;
         SubtitleGridTextSingleLineSeparator = " ⏎ "; // "<br />";
         SubtitleTextBoxFontSize = 15d;
-        SubtitleTextBoxFontBold = true;
+        SubtitleTextBoxFontBold = false;
         SubtitleTextBoxColorTags = true;
         ShowHints = true;
         SubtitleTextBoxCenterText = false;

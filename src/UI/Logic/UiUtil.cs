@@ -95,6 +95,7 @@ public static class UiUtil
         var systemFontNames = FontHelper.GetSystemFonts();
         var goodFontNames = new List<string>()
         {
+            "Segoe UI Variable Text",
             "Segoe UI",
             "San Francisco",
             "SF Pro Text",
