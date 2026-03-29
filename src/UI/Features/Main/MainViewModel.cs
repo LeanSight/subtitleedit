@@ -12146,6 +12146,39 @@ public partial class MainViewModel :
                && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
     }
 
+    [RelayCommand]
+    private async Task CommandAudioOpen()
+    {
+        var fileNames = await _fileHelper.PickOpenAudioFiles(Window!, Se.Language.General.OpenAudioFileTitle);
+        if (fileNames.Length > 0)
+        {
+            await AudioOpenFile(fileNames[0]);
+        }
+    }
+
+    private async Task AudioOpenFile(string audioFileName)
+    {
+        var vp = GetVideoPlayerControl();
+        if (vp == null)
+        {
+            return;
+        }
+
+        _videoOpenTokenSource?.Cancel();
+        await vp.Open(audioFileName);
+        _videoFileName = audioFileName;
+        _mpvReloader.Reset();
+
+        IsVideoLoaded = true;
+
+        var _ = Task.Run(() =>
+        {
+            Dispatcher.UIThread.Post(() => LoadWaveformAndSpectrogram(audioFileName));
+            GetMediaInformation(audioFileName);
+            LoadAudioTrackMenuItems();
+        });
+    }
+
     private async Task VideoOpenFile(string videoFileName) // OpenVideoFile
     {
         var vp = GetVideoPlayerControl();

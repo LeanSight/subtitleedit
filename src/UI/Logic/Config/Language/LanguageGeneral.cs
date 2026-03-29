@@ -351,6 +351,8 @@ public class LanguageGeneral
     public string OpenSubtitles { get; set; }
     public string OpenVideoFile { get; set; }
     public string OpenVideoFileTitle { get; set; }
+    public string OpenAudioFile { get; set; }
+    public string OpenAudioFileTitle { get; set; }
     public string OptimalCharactersPerSecond { get; set; }
     public string Options { get; set; }
     public string OriginalText { get; set; }
@@ -996,6 +998,8 @@ public class LanguageGeneral
         OpenSubtitles = "Open subtitles...";
         OpenVideoFile = "Open video file...";
         OpenVideoFileTitle = "Open video file";
+        OpenAudioFile = "Open audio file...";
+        OpenAudioFileTitle = "Open audio file";
         OptimalCharactersPerSecond = "Optimal characters per second";
         Options = "Options";
         OriginalText = "Original text";

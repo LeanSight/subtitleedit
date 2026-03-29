@@ -11,6 +11,8 @@ public class VideoPlayerInstanceNone : IVideoPlayerInstance
     private string _fileName = string.Empty;
     public string FileName => _fileName;
 
+    public bool IsAudioOnly => false;
+
     public bool IsPlaying => false;
 
     public bool IsPaused => true;

@@ -37,5 +37,6 @@ public interface IFileHelper
         string title);
     Task<string> PickOpenVideoFile(Visual sender, string title);
     Task<string[]> PickOpenVideoFiles(Visual sender, string title);
+    Task<string[]> PickOpenAudioFiles(Visual sender, string title);
     Task<string> PickOpenImageFile(Visual sender, string title);
 }

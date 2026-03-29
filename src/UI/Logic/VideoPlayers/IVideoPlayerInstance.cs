@@ -7,6 +7,7 @@ public interface IVideoPlayerInstance
 {
     string Name { get; }
     string FileName { get; }
+    bool IsAudioOnly { get; }
 
     bool CanLoad();
     Task LoadFile(string fileName);
